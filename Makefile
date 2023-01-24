@@ -22,3 +22,7 @@ publish:
 		--output "type=image,push=true" \
 		--tag $(IMAGE) \
 		.
+
+docker-arm64:
+	docker build -f Dockerfile.arm64 -t dns-noerror:arm64 .
+	docker save dns-noerror:arm64 > dns-noerror.arm64.tar
