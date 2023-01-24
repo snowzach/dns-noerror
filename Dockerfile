@@ -13,3 +13,4 @@ FROM --platform=${TARGETPLATFORM:-linux/amd64} scratch
 WORKDIR /app/
 COPY --from=builder /app/dns-noerror /app/dns-noerror
 ENTRYPOINT ["/app/dns-noerror"]
+
