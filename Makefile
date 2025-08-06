@@ -1,12 +1,10 @@
-.DEFAULT_GOAL := default
+IMAGE ?= snowzach/dns-noerror:latest
+
+default: build
 
 buildx-setup:
 	docker run --rm --privileged multiarch/qemu-user-static --reset -p yes
 	docker buildx create --name crossplat --use
-
-IMAGE ?= snowzach/dns-noerror:latest
-
-export DOCKER_CLI_EXPERIMENTAL=enabled
 
 .PHONY: build # Build the container image
 build:
@@ -17,12 +15,5 @@ build:
 
 .PHONY: publish # Push the image to the remote registry
 publish:
-	docker buildx build \
-		--platform linux/amd64,linux/arm/v7,linux/arm64 \
-		--output "type=image,push=true" \
-		--tag $(IMAGE) \
-		.
+	docker buildx build --platform linux/amd64,linux/arm64,linux/arm/v7 -t $(IMAGE) --push .
 
-docker-arm64:
-	docker build -f Dockerfile.arm64 -t dns-noerror:arm64 .
-	docker save dns-noerror:arm64 > dns-noerror.arm64.tar

@@ -1,8 +1,0 @@
-FROM golang:1.19-alpine as builder
-WORKDIR /app/
-ADD . .
-RUN CGO_ENABLED=0 GOOS=linux GOARCH=arm64 go build -ldflags="-w -s" -o dns-noerror main.go
-
-FROM --platform=linux/arm64 alpine
-COPY --from=builder /app/dns-noerror /dns-noerror
-ENTRYPOINT ["/dns-noerror"]

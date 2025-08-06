@@ -18,16 +18,7 @@ func main() {
 		m := new(dns.Msg)
 		m.SetReply(r)
 		m.Compress = false
-		switch r.Opcode {
-		case dns.OpcodeQuery:
-			if len(r.Question) > 0 && r.Question[0].Qtype == dns.TypeAAAA {
-				// Effectively return no answer for AAAA lookups
-				m.Rcode = dns.RcodeSuccess
-			} else {
-				m.Rcode = dns.RcodeNameError
-			}
-
-		}
+		m.Rcode = dns.RcodeSuccess
 		w.WriteMsg(m)
 	})
 
